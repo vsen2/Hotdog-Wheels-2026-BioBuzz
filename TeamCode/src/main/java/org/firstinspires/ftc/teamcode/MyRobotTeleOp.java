@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class MyRobotTeleOp extends LinearOpMode {
 
     // Instantiate hardware class
-    RobotHardware robot = new RobotHardware();
+    RobotConstants robot = new RobotConstants();
 
     @Override
     public void runOpMode() throws InterruptedException {

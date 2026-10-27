@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class RobotHardware {
+public class RobotConstants {
 
     // Hardware Members
     public DcMotor frontLeft = null;
@@ -24,7 +24,7 @@ public class RobotHardware {
     // Reference to FTC HardwareMap
     private HardwareMap hwMap = null;
 
-    public RobotHardware() {
+    public RobotConstants() {
         // Constructor remains empty
     }
 
@@ -69,3 +69,4 @@ public class RobotHardware {
         imu.initialize(parameters);
     }
 }
+
