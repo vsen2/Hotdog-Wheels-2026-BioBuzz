@@ -1,71 +1,121 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
-import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 import org.firstinspires.ftc.teamcode.Testing.RobotConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
     public Motor shooterMotor;
-    public ServoEx hood, lifter;
-    public RevColorSensorV3 colourSensor;
+    public Servo hood, lifter;
     public double setpoint = RobotConstants.Teleop.FAR_SHOT;
-    public ShooterSubsystem(String[] shooter, HardwareMap hardwareMap){
+    public double speedStep = 0.05; // Speed adjustment step per button press
+
+    public ShooterSubsystem(String[] shooter, HardwareMap hardwareMap) {
         this.shooterMotor = new Motor(hardwareMap, shooter[0]);
-        this.hood = new ServoEx(hardwareMap, shooter[1]);
-        this.lifter = new ServoEx(hardwareMap, shooter[2], 0, 1);
-        this.colourSensor = hardwareMap.get(RevColorSensorV3.class, shooter[4]);
-        shooterMotor.setInverted(shooter[3] == "T");
-        lifter.setInverted(shooter[5] != "T");
-    }
-    public double getSpeed(){
-        return shooterMotor.getCorrectedVelocity();
+        if (shooter.length > 1) {
+            try {
+                this.hood = hardwareMap.get(Servo.class, shooter[1]);
+            } catch (Exception ignored) {}
+        }
+        if (shooter.length > 2) {
+            try {
+                this.lifter = hardwareMap.get(Servo.class, shooter[2]);
+            } catch (Exception ignored) {}
+        }
+
+        if (shooter.length > 3) {
+            shooterMotor.setInverted("T".equals(shooter[3]));
+        }
+        if (lifter != null && shooter.length > 5) {
+            lifter.setDirection("T".equals(shooter[5]) ? Servo.Direction.FORWARD : Servo.Direction.REVERSE);
+        }
     }
 
-    public Motor getShooterMotor(){
+    public double getSpeed() {
+        if (shooterMotor != null && shooterMotor.getDcMotor() != null) {
+            return shooterMotor.getDcMotor().getPower();
+        }
+        return 0.0;
+    }
+
+    public Motor getShooterMotor() {
         return shooterMotor;
     }
 
-    public void setShooterMotor(double speed){
-        shooterMotor.set(speed);
-    }
-
-    public void setHood(double angle){
-        hood.set(angle);
-    }
-    public double[] rgb(){
-        return new double[]{colourSensor.red(), colourSensor.green(), colourSensor.blue()};
-    }
-    public char getColour(){
-        double[]rgb = new double[]{colourSensor.red(), colourSensor.green(), colourSensor.blue()};
-        double[] min = RobotConstants.Teleop.WHITE_RGB;
-        if(Math.sqrt(Math.pow(min[0]-rgb[0], 2)+Math.pow(min[1]-rgb[1], 2)+Math.pow(min[2]-rgb[2], 2))<RobotConstants.Teleop.WHITE_THRESHOLD){
-            return 'n';
-        }
-        else if(rgb[0]<RobotConstants.Teleop.INTAKE_MIN){
-            return 'g';
-        }else{
-            return 'r';
+    public void setShooterMotor(double speed) {
+        this.setpoint = Math.max(0.0, Math.min(1.0, speed));
+        if (shooterMotor != null) {
+            shooterMotor.set(this.setpoint);
         }
     }
-    public boolean isGreen() {
-        int red = colourSensor.red(); //when teh camera scans for RGB, it returns a number value. Purple is red+blue, and green is green (duh). If the green number is more than the others, it should be green.
-        int blue = colourSensor.blue();
-        int green = colourSensor.green();
 
-        return green > red && green > blue; //If it's more green then red/blue(which makes purple), it's green
+    /**
+     * Increase the target shooter speed by speedStep (default 0.05).
+     */
+    public void increaseSpeed() {
+        increaseSpeed(speedStep);
     }
 
-    public void feedShoot(){
-        lifter.set(RobotConstants.Teleop.FEED);
+    /**
+     * Increase target shooter speed by a specific amount.
+     */
+    public void increaseSpeed(double amount) {
+        setpoint = Math.min(1.0, setpoint + amount);
+        if (shooterMotor != null) {
+            shooterMotor.set(setpoint);
+        }
     }
-    public void resetFeed()
-    {
-        lifter.set(RobotConstants.Teleop.STOW_FEEDER);
+
+    /**
+     * Decrease the target shooter speed by speedStep (default 0.05).
+     */
+    public void decreaseSpeed() {
+        decreaseSpeed(speedStep);
     }
-    public void liftArm(){
-        lifter.set(RobotConstants.Teleop.INTAKE_FEEDER);
+
+    /**
+     * Decrease target shooter speed by a specific amount.
+     */
+    public void decreaseSpeed(double amount) {
+        setpoint = Math.max(0.0, setpoint - amount);
+        if (shooterMotor != null) {
+            shooterMotor.set(setpoint);
+        }
+    }
+
+    public double getTargetSpeed() {
+        return setpoint;
+    }
+
+    public void setHood(double position) {
+        if (hood != null) {
+            hood.setPosition(position);
+        }
+    }
+
+    /**
+     * Feeds the ball into the flywheel.
+     */
+    public void feedShoot() {
+        if (lifter != null) {
+            lifter.setPosition(RobotConstants.Teleop.FEED);
+        }
+    }
+
+    /**
+     * Resets the feeder servo back to stow position.
+     */
+    public void resetFeed() {
+        if (lifter != null) {
+            lifter.setPosition(RobotConstants.Teleop.STOW_FEEDER);
+        }
+    }
+
+    public void liftArm() {
+        if (lifter != null) {
+            lifter.setPosition(RobotConstants.Teleop.INTAKE_FEEDER);
+        }
     }
 }
