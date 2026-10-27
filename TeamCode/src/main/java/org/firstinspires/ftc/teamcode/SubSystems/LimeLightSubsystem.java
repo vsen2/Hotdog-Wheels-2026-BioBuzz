@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Testing.RobotConstants;
 
-public class LimeLightSubsystem {
+public class LimelightSubsystem {
     private Limelight3A limelight;
 
-    public LimeLightSubsystem(HardwareMap hardwareMap) {
+    public LimelightSubsystem(HardwareMap hardwareMap) {
         this.limelight = hardwareMap.get(Limelight3A.class, RobotConstants.Hardware.LIME_LIGHT);
         this.limelight.setPollRateHz(100);
         this.limelight.start();

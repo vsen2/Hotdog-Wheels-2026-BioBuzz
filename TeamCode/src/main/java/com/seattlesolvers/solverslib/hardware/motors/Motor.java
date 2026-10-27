@@ -1,6 +1,7 @@
 package com.seattlesolvers.solverslib.hardware.motors;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -30,6 +31,15 @@ public class Motor {
         if (dcMotor != null) {
             dcMotor.setZeroPowerBehavior(behavior);
         }
+    }
+
+    public double getCorrectedVelocity() {
+        if (dcMotor instanceof DcMotorEx) {
+            return ((DcMotorEx) dcMotor).getVelocity();
+        } else if (dcMotor != null) {
+            return dcMotor.getPower();
+        }
+        return 0.0;
     }
 
     public DcMotor getDcMotor() {

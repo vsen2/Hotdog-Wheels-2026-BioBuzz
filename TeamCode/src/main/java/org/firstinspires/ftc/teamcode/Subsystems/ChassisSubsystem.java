@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Testing.RobotConstants;
@@ -14,6 +15,7 @@ public class ChassisSubsystem extends SubsystemBase {
     DcMotor frontLeft, frontRight, backLeft, backRight;
     HardwareMap hardwareMap;
     IMU imu;
+    SparkFunOTOS otos;
 
     public ChassisSubsystem(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -68,8 +70,28 @@ public class ChassisSubsystem extends SubsystemBase {
         backRight.setPower((rotY + rotX - turn) / denominator);
     }
 
+    public void fieldOriented(double strafe, double forward, double turn) {
+        driveFieldOriented(forward, strafe, turn);
+    }
+
     public void resetYaw() {
         imu.resetYaw();
+    }
+
+    public void setStartPoseOTOS(SparkFunOTOS.Pose2D pose) {
+        if (otos == null) {
+            otos = hardwareMap.get(SparkFunOTOS.class, RobotConstants.Hardware.OTOS_SENSOR);
+        }
+        if (otos != null) {
+            otos.setPosition(pose);
+        }
+    }
+
+    public SparkFunOTOS getOtos() {
+        if (otos == null) {
+            otos = hardwareMap.get(SparkFunOTOS.class, RobotConstants.Hardware.OTOS_SENSOR);
+        }
+        return otos;
     }
 
     public void stop() {

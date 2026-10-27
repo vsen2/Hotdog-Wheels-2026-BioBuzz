@@ -38,6 +38,11 @@ public class RobotConstants {
 
     public static class Tuning {
         public static double[] CHASSIS_TURN_PID_COEFFICIENTS = {0.05, 0.0, 0.005};
+        public static double[] CHASSIS_PID_COEFFICIENTS_POINT = {0.05, 0.0, 0.005};
         public static double TA_TO_SPEED = 1.0;
+    }
+
+    public static double clamp(double val, double min, double max) {
+        return Math.max(min, Math.min(max, val));
     }
 }
