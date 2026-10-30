@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private Servo lifter;
 
     private double setpoint = RobotConstants.Teleop.FAR_SHOT; // Target speed (0.0 to 1.0)
-    private double speedStep = 0.05;                          // Increment for speed adjustments
+    private final double speedStep = 0.05;                    // Increment for speed adjustments
     private Telemetry telemetry;
 
     /**
@@ -44,9 +44,6 @@ public class ShooterSubsystem extends SubsystemBase {
         this(hardwareMap, null);
     }
 
-    /**
-     * Legacy string-array constructor kept for backwards compatibility.
-     */
     public ShooterSubsystem(String[] shooter, HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.shooterMotor = new Motor(hardwareMap, shooter[0]);
