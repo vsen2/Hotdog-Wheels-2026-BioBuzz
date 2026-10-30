@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands;
+package org.firstinspires.ftc.teamcode;
 
 
 public class RobotConstants {
@@ -7,7 +7,8 @@ public class RobotConstants {
         public static String FRONT_RIGHT_MOTOR = "frontRight";
         public static String BACK_LEFT_MOTOR = "backLeft";
         public static String BACK_RIGHT_MOTOR = "backRight";
-        public static String INTAKE_MOTOR = "intake";
+        public static String INTAKE_MOTOR_FRONT = "intakeFront";
+        public static String INTAKE_MOTOR_BACK = "intakeBack";
         public static String SHOOTER_MOTOR_1 = "shooterTop";
         public static String SHOOTER_MOTOR_2 = "shooterBottom";
         public static String HOOD_SERVO = "hood";
@@ -25,8 +26,8 @@ public class RobotConstants {
 
     public static class Teleop {
         public static boolean DEFAULT_FIELD_CENTRIC = true;
-        public static double INTAKE_SPEED = 1.0;
-        public static double SPIT_SPEED = -1.0;
+        public static double INTAKE_SPEED = 0.9;
+        public static double SPIT_SPEED = -0.9;
         public static double FAR_SHOT = 0.8;
         public static double[] WHITE_RGB = {255, 255, 255};
         public static double WHITE_THRESHOLD = 50.0;
