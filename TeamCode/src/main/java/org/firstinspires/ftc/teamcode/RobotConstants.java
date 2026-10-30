@@ -1,72 +1,48 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Commands;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class RobotConstants {
+    public static class Hardware {
+        public static String FRONT_LEFT_MOTOR = "frontLeft";
+        public static String FRONT_RIGHT_MOTOR = "frontRight";
+        public static String BACK_LEFT_MOTOR = "backLeft";
+        public static String BACK_RIGHT_MOTOR = "backRight";
+        public static String INTAKE_MOTOR = "intake";
+        public static String SHOOTER_MOTOR_1 = "shooterTop";
+        public static String SHOOTER_MOTOR_2 = "shooterBottom";
+        public static String HOOD_SERVO = "hood";
+        public static String TURRET_SERVO_LEFT = "turretLeft";
+        public static String TURRET_SERVO_RIGHT = "turretRight";
+        public static String INTAKE_SERVO_LEFT = "intakeLeft";
+        public static String INTAKE_SERVO_RIGHT = "intakeRight";
+        public static String RAMP_SERVO = "ramp";
 
-    // Hardware Members
-    public DcMotor frontLeft = null;
-    public DcMotor backLeft = null;
-    public DcMotor frontRight = null;
-    public DcMotor backRight = null;
-
-    public DcMotor intakeMotor = null;
-    public DcMotor liftMotor = null;
-    public Servo clawServo = null;
-
-    public IMU imu = null;
-
-    // Reference to FTC HardwareMap
-    private HardwareMap hwMap = null;
-
-    public RobotConstants() {
-        // Constructor remains empty
+        // SENSORS
+        public static String OTOS_SENSOR = "otos";
+        public static String LIME_LIGHT = "limelight";
+        public static String[] COLOUR_SENSORS = {"LeftColourSensor"};
     }
 
-    /**
-     * Initialize all hardware interfaces.
-     * Call this inside runOpMode() in TeleOp and Autonomous.
-     */
-    public void init(HardwareMap ahwMap) {
-        hwMap = ahwMap;
+    public static class Teleop {
+        public static boolean DEFAULT_FIELD_CENTRIC = true;
+        public static double INTAKE_SPEED = 1.0;
+        public static double SPIT_SPEED = -1.0;
+        public static double FAR_SHOT = 0.8;
+        public static double[] WHITE_RGB = {255, 255, 255};
+        public static double WHITE_THRESHOLD = 50.0;
+        public static double INTAKE_MIN = 100.0;
+        public static double FEED = 0.5;
+        public static double STOW_FEEDER = 0.0;
+        public static double INTAKE_FEEDER = 0.2;
+    }
 
-        // Map Drivetrain Motors
-        frontLeft  = hwMap.get(DcMotor.class, "frontLeft");
-        backLeft   = hwMap.get(DcMotor.class, "backLeft");
-        frontRight = hwMap.get(DcMotor.class, "frontRight");
-        backRight  = hwMap.get(DcMotor.class, "backRight");
+    public static class Tuning {
+        public static double[] CHASSIS_TURN_PID_COEFFICIENTS = {0.05, 0.0, 0.005};
+        public static double[] CHASSIS_PID_COEFFICIENTS_POINT = {0.05, 0.0, 0.005};
+        public static double TA_TO_SPEED = 1.0;
+    }
 
-        // Set Drivetrain Motor Directions
-        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        // Set Drivetrain RunModes & Brake Modes
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Map Mechanism Hardware
-        intakeMotor = hwMap.get(DcMotor.class, "intake");
-        liftMotor   = hwMap.get(DcMotor.class, "lift");
-        clawServo   = hwMap.get(Servo.class, "claw");
-
-        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Initialize IMU
-        imu = hwMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-        ));
-        imu.initialize(parameters);
+    public static double clamp(double val, double min, double max) {
+        return Math.max(min, Math.min(max, val));
     }
 }
-
