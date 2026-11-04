@@ -46,4 +46,8 @@ public class RobotConstants {
     public static double clamp(double val, double min, double max) {
         return Math.max(min, Math.min(max, val));
     }
+
+    public static double metersToInches(double meters) {
+        return meters / 0.0254;
+    }
 }
